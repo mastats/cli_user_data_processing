@@ -1,3 +1,14 @@
+# custom folders
+images/
+
+# custom files
+users.db
+exploration.ipynb
+example.json
+users2.csv
+users3.csv
+users4.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
