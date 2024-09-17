@@ -1,6 +1,6 @@
 # CLI to fetch user data
 CLI app that interacts with an external API to fetch user data (https://randomuser.me/api/).
-This app is designed for an environment running Python 3.9.6
+This app is designed for an environment running Python 3.9.6. 
 
 ## Setup
 
