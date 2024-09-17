@@ -87,7 +87,7 @@ The app is structured in 3 Python files:
 A timezone table can be added since the data is available in the API. This data could be added as a new table connected to locations, considering that multiple locations could share the same timezone.
 
 2. Use of templates
-Maintenance can be done easier with templates, Jinja could be incorporated for high flexibility. At the current level of complexity python is enough to generate templates, generate lists or dynamic SQL code.
+To improve maintenance and readability templates could be used, e.g. Jinja could be incorporated (highly flexible templates). At the current level of complexity python is enough to generate simple templates, lists or dynamic SQL code.
 
 3. Use of classes for the CLI app
 As the app grows and becomes more complex the uses of classes can be beneficial. Specially if there are commands that share logic, we need to group some commands, modularity is desired, or we need additional configuration or session data. 
