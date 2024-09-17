@@ -81,4 +81,9 @@ The app is structured in 3 Python files:
 * **database.py:** contains a class that encapsulates all the code interacting with the database. Enables modularity and reusability making maintenance easier.
 * **utils.py:** contains all utility functions that support the app (e.g. fetch user data from the API).
 
+### Next features
+1. Adding a timezone table
+A timezone table can be added since the data is available in the API. This data could be added as a new table connected to locations, considering that multiple locations could share the same timezone.
 
+2. Use of templates
+To improve maintenance and readability templates could be used, e.g. Jinja could be incorporated (highly flexible templates). At the current level of complexity python is enough to generate simple templates, lists or dynamic SQL code.
