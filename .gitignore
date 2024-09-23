@@ -9,6 +9,7 @@ exploration.ipynb
 example.json
 data_model.sql
 backup.py
+cli_extras.py
 users2.csv
 users3.csv
 users4.csv

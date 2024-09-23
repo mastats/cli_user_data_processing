@@ -1,13 +1,30 @@
 import requests
 
 API_URL = "https://randomuser.me/api/"
+WEATHER_URL = "https://api.open-meteo.com/v1/forecast"
+
+def fetch_temperature(latitude, longitude):
+    """Fetches the current temperature based on latitude and longitude."""
+    params = {
+        'latitude': latitude,
+        'longitude': longitude,
+        'current': 'temperature_2m'
+    }
+    response = requests.get(WEATHER_URL, params=params)
+    data = response.json()
+    temperature = data['current']['temperature_2m']
+    return temperature
 
 def fetch_users(results):
     """Fetches users from Random User API."""
     response = requests.get(API_URL, params={'results': results})
     data = response.json()['results']
-    return [
-        {   
+    users = []
+    for user in data:
+        latitude = user['location']['coordinates']['latitude']
+        longitude = user['location']['coordinates']['longitude']
+        temperature = fetch_temperature(latitude, longitude)
+        users.append({
             # users
             'first_name': user['name']['first'],
             'last_name': user['name']['last'],
@@ -26,6 +43,7 @@ def fetch_users(results):
             'postcode': user['location']['postcode'],
             'latitude': user['location']['coordinates']['latitude'],
             'longitude': user['location']['coordinates']['longitude'],
+            'temperature': temperature,
             # logins
             'uuid': user['login']['uuid'],
             'username': user['login']['username'],
@@ -38,9 +56,8 @@ def fetch_users(results):
             'large': user['picture']['large'],
             'medium': user['picture']['medium'],
             'thumbnail': user['picture']['thumbnail']
-        }
-        for user in data
-    ]
+        })
+    return users
 
 def save_image(url, file_path):
     """Downloads an image from a URL and saves it locally."""

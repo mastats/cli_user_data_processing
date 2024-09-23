@@ -32,15 +32,16 @@ def export_users(file):
     click.echo(f'Exported users to {file}.')
 
 @cli.command()
+@click.option('--user_id', default=None, help='Filter by user ID.')
 @click.option('--first_name', default=None, help='Filter by first name.')
 @click.option('--last_name', default=None, help='Filter by last name.')
 @click.option('--age', default=None, help='Filter by age.')
 @click.option('--country', default=None, help='Filter by country.')
-def show_users(first_name, last_name, age, country):
+def show_users(user_id, first_name, last_name, age, country):
     """Displays users from the database with optional filtering."""
-    users = db.get_filtered_users(first_name, last_name, age, country)
+    users = db.get_filtered_users(user_id, first_name, last_name, age, country)
     for user in users:
-        click.echo(f"ID: {user.user_id}, Name: {user.first_name} {user.last_name}, Age: {user.age}, Country: {user.location.country}")
+        click.echo(f"ID: {user.user_id}, Name: {user.first_name} {user.last_name}, Country: {user.location.country}, Temperature: {user.location.temperature}")
 
 @cli.command()
 @click.option('--dir', default='images', help='Directory to store images.')
@@ -51,7 +52,7 @@ def download_images(dir, size):
     if not os.path.exists(dir):
         os.makedirs(dir)
     for user_id, image_url in users: #tuple
-        print(image_url)
+        #print(image_url)
         save_image(image_url, os.path.join(dir, f"{user_id}.jpg"))
     click.echo(f'Downloaded images to {dir}.')
 

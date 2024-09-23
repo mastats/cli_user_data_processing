@@ -34,7 +34,8 @@ class UserDatabase:
                 country=user_data['country'],
                 postcode=user_data['postcode'],
                 latitude=user_data['latitude'],
-                longitude=user_data['longitude']
+                longitude=user_data['longitude'],
+                temperature=user_data['temperature']
             )
             login = Login(
                 user_id=user.user_id,
@@ -57,16 +58,19 @@ class UserDatabase:
             self.session.add(login)
             self.session.add(picture)
         self.session.commit()
+        self.session.close()
 
     def get_all_users(self):
         """Fetches all users from the database."""
         users = self.session.query(User).all()
-        return users  # You can convert this to a list of dicts if needed
+        return users  # 
 
-    def get_filtered_users(self, first_name=None, last_name=None, age=None, country=None):
+    def get_filtered_users(self, user_id=None, first_name=None, last_name=None, age=None, country=None):
         """Fetches filtered users based on first and last name."""
         query = self.session.query(User).join(Location)
         
+        if user_id:
+            query = query.filter(User.user_id.like(f'{user_id}'))
         if first_name:
             query = query.filter(User.first_name.like(f'%{first_name}%'))
         if last_name:
@@ -85,3 +89,6 @@ class UserDatabase:
         else:
             pictures = self.session.query(Picture).all()
         return pictures
+    
+
+    

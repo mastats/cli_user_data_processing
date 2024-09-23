@@ -34,6 +34,7 @@ class Location(Base):
     postcode = Column(String)
     latitude = Column(Float)
     longitude = Column(Float)
+    temperature = Column(Float)
     
     user = relationship("User", back_populates="location")
 
