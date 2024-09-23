@@ -1,13 +1,18 @@
 # custom folders
 images/
+images_thumbnail/
+images_medium/
 
 # custom files
 users.db
 exploration.ipynb
 example.json
+data_model.sql
+backup.py
 users2.csv
 users3.csv
 users4.csv
+users6.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

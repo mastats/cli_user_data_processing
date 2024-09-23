@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["python", "cli.py"]
+CMD ["bash", "-c", "python cli.py; exec bash"]

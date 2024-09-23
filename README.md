@@ -30,28 +30,28 @@ python cli.py --help
 
 Fetch and import users from the API into the database. You can use the --results argument to define how many users are to be fetched.
 ```bash
-python cli.py import_users --results 100
+python cli.py import-users --results 100
 ```
 
 2. **Export Users:**
 
 Exports all users to a CSV file. You can use the --file argument to set the name of the output file.
 ```bash
-python cli.py export_users --file users.csv
+python cli.py export-users --file users.csv
 ```
 
 3. **Show Users:**
 
 Show all users or filter by first name, last name.
 ```bash
-python cli.py show_users --first_name John --last_name Doe
+python cli.py show-users --first_name John --last_name Doe
 ```
 
 4. **Download Images:**
 
 Download all user profile images to a local directory. You can use the --dir argument to set the name of the directory. The app will create the necessary folders for you. 
 ```bash
-python cli.py download_images --dir ./images
+python cli.py download-images --dir ./images
 ```
 
 ## Containerization
@@ -64,10 +64,24 @@ You can also run this solution from a container. Check the Dockerfile included i
 docker build -t random_user_cli .
 ```
 
-2. **Run the CLI app inside the container:**
+2. **Start the container:**
 
 ```bash
-docker run -it random_user_cli python cli.py import_users --results 100
+docker run -it random_user_cli
+```
+
+2. **Run the CLI app inside the container:**
+
+If you are inside the container then:
+
+```bash
+python cli.py import-users --results 10
+```
+
+If you only want to execute a specific task then:
+
+```bash
+docker run random_user_cli python cli.py import-users --results 100
 ```
 
 ## Design & asumptions
@@ -88,6 +102,10 @@ Design key points:
 * This model reduces redundancy since each table stores distinct data, solves partial dependencies and makes data updates flexible.
 * Transactional inserts to commit each user in batches are used to improve performance, ensure atomicity and correct handle of the foreign keys.
 * The abstracted database layer is easier to migrate to another database system.
+* SQLAlchemy is used for the multiple benefits it offers like:
+    * Abstract the database engine allowing to work with multiple databases with minimal changes.
+    * Write less raw queries (E.g. filter_by).
+    * Data validation and integrity checks
 
 ### CLI App
 The app is structured in 3 Python files:
@@ -108,3 +126,7 @@ To improve maintenance and readability templates could be used, e.g. Jinja could
 3. **Use of classes for the CLI app**
 
 As the app grows and becomes more complex the uses of classes can be beneficial. Specially if there are commands that share logic or need to be grouped, additional modularity, configuration or session data is required. 
+
+4. **Wrap the CLI in a Web Service**
+
+Flask could be used to create an HTTP interface with multiple endpoints that runs the CLI commands with the requested parameters. The web service could be accessed directly or provided as a part of a in-house backoffice solution made with any front-end framework.
