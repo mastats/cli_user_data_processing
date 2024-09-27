@@ -1,8 +1,8 @@
 import click
 from database import UserDatabase
-from utils import fetch_users, save_image
+from utils import fetch_users, save_image, download_images_async
 import csv
-import os
+import asyncio
 
 db = UserDatabase()
 
@@ -46,14 +46,11 @@ def show_users(user_id, first_name, last_name, age, country):
 @cli.command()
 @click.option('--dir', default='images', help='Directory to store images.')
 @click.option('--size', default='medium', type=click.Choice(['large', 'medium', 'thumbnail']), help='Images size')
-def download_images(dir, size):
+@click.option('--max_concurrent', default=100, help='Max number of images to download concurrently.')
+def download_images(dir, size, max_concurrent):
     """Downloads user profile images to a local directory."""
     users = db.get_users_pictures(size=size)
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    for user_id, image_url in users: #tuple
-        #print(image_url)
-        save_image(image_url, os.path.join(dir, f"{user_id}.jpg"))
+    asyncio.run(download_images_async(users, dir, max_concurrent))
     click.echo(f'Downloaded images to {dir}.')
 
 if __name__ == '__main__':

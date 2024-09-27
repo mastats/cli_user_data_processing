@@ -1,6 +1,7 @@
 # CLI to fetch user data
 CLI app that interacts with an external API to fetch user data (https://randomuser.me/api/).
-This app has been testing in the following versions: Python 3.9.6 and Python 3.10.
+An additional API is used to fetch weather data for each user location (https://open-meteo.com/en/docs#current=temperature_2m&hourly=).
+This app is tested in the following Python versions: 3.9.6, 3.10.
 
 ## Setup
 
@@ -49,7 +50,8 @@ python cli.py show-users --first_name John --last_name Doe
 
 4. **Download Images:**
 
-Download all user profile images to a local directory. You can use the --dir argument to set the name of the directory. The app will create the necessary folders for you. 
+Download all user profile images to a local directory. You can use the --dir argument to set the name of the directory. The app will create the necessary folders for you.
+In order to facilitate the download of a large volume of pictures in an efficient way, this task is executed with async functions.
 ```bash
 python cli.py download-images --dir ./images
 ```
@@ -108,13 +110,16 @@ Design key points:
     * Data validation and integrity checks
 
 ### CLI App
+
 The app is structured in 3 Python files:
 
 * **cli.py:** contains all commands defined in individual functions.
 * **database.py:** contains a class that encapsulates all the code interacting with the database. Enables modularity and reusability making maintenance easier.
+* **models.py** contains the model definition with the tables structure focusing on normalized storage. Expected data types are enforced by SQLAlchemy.
 * **utils.py:** contains all utility functions that support the app (e.g. fetch user data from the API).
 
-### Next features
+### Next features and improvements
+
 1. **Adding a timezone table**
 
 A timezone table can be added since the data is available in the API. This data could be added as a new table connected to locations, considering that multiple locations could share the same timezone.
@@ -129,4 +134,4 @@ As the app grows and becomes more complex the uses of classes can be beneficial.
 
 4. **Wrap the CLI in a Web Service**
 
-Flask could be used to create an HTTP interface with multiple endpoints that runs the CLI commands with the requested parameters. The web service could be accessed directly or provided as a part of a in-house backoffice solution made with any front-end framework.
+Flask or FastAPI could be used to create an HTTP interface with multiple endpoints that runs the CLI commands with the requested parameters. The web service could be accessed directly or provided as a part of a in-house backoffice solution made with any front-end framework.

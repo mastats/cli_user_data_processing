@@ -1,4 +1,7 @@
 import requests
+import os
+import asyncio
+import aiohttp
 
 API_URL = "https://randomuser.me/api/"
 WEATHER_URL = "https://api.open-meteo.com/v1/forecast"
@@ -64,3 +67,21 @@ def save_image(url, file_path):
     response = requests.get(url)
     with open(file_path, 'wb') as image_file:
         image_file.write(response.content)
+
+async def fetch_image(session, semaphore, url, file_path):
+    async with semaphore:
+        async with session.get(url) as response:
+            if response.status == 200:
+                with open(file_path, 'wb') as image_file:
+                    image_file.write(await response.read())
+
+async def download_images_async(image_urls, dir, max_concurrent):
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    semaphore = asyncio.Semaphore(max_concurrent)
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        for user_id, url in image_urls:
+            file_path = os.path.join(dir, f"{user_id}.jpg")
+            tasks.append(fetch_image(session, semaphore, url, file_path))
+        await asyncio.gather(*tasks)
